@@ -12,7 +12,7 @@ var attacking: bool = false
 
 @onready var walk: State = $"../Walk"
 @onready var idle = $"../Idle"
-
+@onready var hurt_box = $"../../Interactions/HurtBox"
 
 func Enter() -> void:
 	player.UpdateAnimation("attack")
@@ -24,10 +24,14 @@ func Enter() -> void:
 	audio.play()
 	
 	attacking = true
+	
+	await get_tree().create_timer(0.075).timeout
+	hurt_box.monitoring = true
 
 func Exit() -> void:
 	animation_player.animation_finished.disconnect(EndAttack)
 	attacking = false
+	hurt_box.monitoring = false
 
 func Process(delta: float) -> State:
 	player.velocity -= player.velocity * decelarate_speed * delta
