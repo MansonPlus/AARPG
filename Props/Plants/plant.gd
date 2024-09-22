@@ -1,8 +1,10 @@
 class_name Plant
 extends Node2D
 
-func _ready():
-	$HitBox.damaged.connect(TakeDamage)
+@onready var hit_box = $HitBox
 
-func TakeDamage(_damage: int) -> void:
+func _ready():
+	hit_box.damaged.connect(TakeDamage)
+
+func TakeDamage(hurt_box: HurtBox) -> void:
 	queue_free()
