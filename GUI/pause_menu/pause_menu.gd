@@ -1,7 +1,11 @@
 extends CanvasLayer
 
-@onready var button_save = $VBoxContainer/Button_Save
-@onready var button_load = $VBoxContainer/Button_Load
+signal shown
+signal hidden
+
+@onready var button_save = $Control/HBoxContainer/Button_Save
+@onready var button_load = $Control/HBoxContainer/Button_Load
+@onready var item_description = $Control/ItemDescription
 
 var is_paused: bool = false
 
@@ -22,12 +26,13 @@ func show_pause_menu() -> void:
 	get_tree().paused = true
 	visible = true
 	is_paused = true
-	button_save.grab_focus()
+	shown.emit()
 
 func hide_pause_menu() -> void:
 	get_tree().paused = false
 	visible = false
 	is_paused = false
+	hidden.emit()
 
 func _on_save_pressed() -> void:
 	if is_paused == false:
@@ -41,3 +46,6 @@ func _on_load_pressed() -> void:
 	SaveManager.load_game()
 	await LevelManager.level_load_started
 	hide_pause_menu()
+
+func update_item_description(new_text: String):
+	item_description.text = new_text
